@@ -37,3 +37,5 @@ Thumbs.db
 appsettings.Local.json
 appsettings.*.local.json
 secrets.json
+
+WebApplication1/students.json
