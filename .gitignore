@@ -1,0 +1,39 @@
+## Build output
+[Bb]in/
+[Oo]bj/
+out/
+
+## User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+## IDE/editor folders
+.vs/
+.vscode/
+
+## Test and coverage results
+TestResults/
+*.coverage
+*.coveragexml
+
+## Logs
+*.log
+
+## NuGet
+*.nupkg
+*.snupkg
+
+## Publish artifacts
+publish/
+
+## OS files
+.DS_Store
+Thumbs.db
+
+## Local development settings/secrets
+appsettings.Local.json
+appsettings.*.local.json
+secrets.json
