@@ -35,8 +35,8 @@
     },
     "Infrastructure/1.0.0": {
       "type": "project",
-      "path": "../InfraStructure/Infrastructure.csproj",
-      "msbuildProject": "../InfraStructure/Infrastructure.csproj"
+      "path": "../Infrastructure/Infrastructure.csproj",
+      "msbuildProject": "../Infrastructure/Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -79,8 +79,8 @@
             "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\Core\\Core.csproj": {
               "projectPath": "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\Core\\Core.csproj"
             },
-            "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\InfraStructure\\Infrastructure.csproj": {
-              "projectPath": "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\InfraStructure\\Infrastructure.csproj"
+            "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\Infrastructure\\Infrastructure.csproj": {
+              "projectPath": "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\Infrastructure\\Infrastructure.csproj"
             }
           }
         }

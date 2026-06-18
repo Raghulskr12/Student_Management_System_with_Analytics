@@ -343,14 +343,14 @@
         }
       }
     },
-    "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\InfraStructure\\Infrastructure.csproj": {
+    "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\Infrastructure\\Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\InfraStructure\\Infrastructure.csproj",
+        "projectUniqueName": "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\Infrastructure\\Infrastructure.csproj",
         "projectName": "Infrastructure",
-        "projectPath": "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\InfraStructure\\Infrastructure.csproj",
+        "projectPath": "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\Infrastructure\\Infrastructure.csproj",
         "packagesPath": "C:\\Users\\Victus\\.nuget\\packages\\",
-        "outputPath": "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\InfraStructure\\obj\\",
+        "outputPath": "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -716,8 +716,8 @@
               "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\Core\\Core.csproj": {
                 "projectPath": "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\Core\\Core.csproj"
               },
-              "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\InfraStructure\\Infrastructure.csproj": {
-                "projectPath": "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\InfraStructure\\Infrastructure.csproj"
+              "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\Infrastructure\\Infrastructure.csproj": {
+                "projectPath": "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\Infrastructure\\Infrastructure.csproj"
               }
             }
           }
