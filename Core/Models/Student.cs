@@ -7,10 +7,10 @@ namespace Core.Models
     public class Student
     {
         private static readonly HashSet<string> AllowedGrades = new() { "A", "B", "C", "D", "F" };
-        private string _grade;
+        private string _grade = "F"; // Default grade
 
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public string Grade
         {
             get => _grade;

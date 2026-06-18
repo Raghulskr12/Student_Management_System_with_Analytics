@@ -27,3 +27,9 @@ D:\.net\Student_Management_System_with_Analytics_-_API_Integration\WebApplicatio
 D:\.net\Student_Management_System_with_Analytics_-_API_Integration\WebApplication1\obj\Debug\net10.0\WebApplication1.pdb
 D:\.net\Student_Management_System_with_Analytics_-_API_Integration\WebApplication1\obj\Debug\net10.0\WebApplication1.genruntimeconfig.cache
 D:\.net\Student_Management_System_with_Analytics_-_API_Integration\WebApplication1\obj\Debug\net10.0\ref\WebApplication1.dll
+D:\.net\Student_Management_System_with_Analytics_-_API_Integration\WebApplication1\bin\Debug\net10.0\Core.dll
+D:\.net\Student_Management_System_with_Analytics_-_API_Integration\WebApplication1\bin\Debug\net10.0\Infrastructure.dll
+D:\.net\Student_Management_System_with_Analytics_-_API_Integration\WebApplication1\bin\Debug\net10.0\Core.pdb
+D:\.net\Student_Management_System_with_Analytics_-_API_Integration\WebApplication1\bin\Debug\net10.0\Infrastructure.pdb
+D:\.net\Student_Management_System_with_Analytics_-_API_Integration\WebApplication1\obj\Debug\net10.0\WebApplication1.csproj.AssemblyReference.cache
+D:\.net\Student_Management_System_with_Analytics_-_API_Integration\WebApplication1\obj\Debug\net10.0\WebAppli.7D14BD69.Up2Date

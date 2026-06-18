@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.TextJson;
+using System.Text.Json;
 using Core.Interfaces;
 using Core.Models;
 
