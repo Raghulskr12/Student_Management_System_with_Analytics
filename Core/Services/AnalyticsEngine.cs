@@ -11,7 +11,7 @@ namespace Core.Services
 
         public AnalyticsEngine()
         {
-            // Populate seed data containing 12 items across 3 core categories
+            
             _products = new List<Product>
             {
                 new(1, "ThinkPad X1 Carbon", 120000m, "Electronics"),
@@ -31,7 +31,6 @@ namespace Core.Services
 
         public IEnumerable<Product> GetProducts() => _products;
 
-        // --- LINQ Queries Required by Blueprint ---
 
         // 1. Filtering & Sorting Students
         public IEnumerable<Student> GetStudentsWithGradeSorted(IEnumerable<Student> students, string grade)
