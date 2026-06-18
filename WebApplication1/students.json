@@ -2,7 +2,13 @@
   {
     "Id": 12,
     "Name": "john",
-    "Grade": "B",
+    "Grade": "A",
+    "ExternalData": ""
+  },
+  {
+    "Id": 13,
+    "Name": "pinky",
+    "Grade": "A",
     "ExternalData": ""
   }
 ]

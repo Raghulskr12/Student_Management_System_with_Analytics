@@ -39,9 +39,10 @@ static void RunMenuLoop(IStudentRepository repo)
         Console.WriteLine("3. Update Student");
         Console.WriteLine("4. Delete Student");
         Console.WriteLine("5. Search Students");
-        Console.WriteLine("6. Exit");
+        Console.WriteLine("6. Run LINQ Analytics Engine ");
+        Console.WriteLine("7. Exit");
         Console.WriteLine("=========================================");
-        Console.Write("Select an option (1-6): ");
+        Console.Write("Select an option (1-7): ");
 
         string choice = Console.ReadLine() ?? "";
         Console.WriteLine();
@@ -55,7 +56,8 @@ static void RunMenuLoop(IStudentRepository repo)
                 case "3": HandleUpdate(repo); break;
                 case "4": HandleDelete(repo); break;
                 case "5": HandleSearch(repo); break;
-                case "6": exit = true; break;
+                case "6": HandleAnalytics(repo); break;
+                case "7": exit = true; break;
                 default:
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Invalid option selection. Press any key to retry...");
@@ -203,4 +205,59 @@ static void PrintTable(IEnumerable<Student> students)
         Console.WriteLine(string.Format("| {0, -10} | {1, -25} | {2, -10} |", student.Id, student.Name, student.Grade));
     }
     Console.WriteLine("-----------------------------------------------------------------");
+}
+
+static void HandleAnalytics(IStudentRepository repo)
+{
+    Console.Clear();
+    Console.WriteLine("=================================================================");
+    Console.WriteLine("                       LINQ ANALYTICS                            ");
+    Console.WriteLine("=================================================================");
+
+    var analytics = new Core.Services.AnalyticsEngine();
+    var allStudents = repo.GetAll().ToList();
+
+    // 1. Student Grade Filtering & Sorting
+    Console.WriteLine("\n[1. Students with Grade 'A' Sorted Ascending By Name]");
+    var topStudents = analytics.GetStudentsWithGradeSorted(allStudents, "A");
+    foreach (var s in topStudents)
+    {
+        Console.WriteLine($" -> ID: {s.Id} | Name: {s.Name}");
+    }
+    if (!topStudents.Any()) Console.WriteLine(" No active students holding an 'A' status.");
+
+    // 2. Product Category and Price Queries
+    Console.WriteLine("\n[2. Electronics Priced Above 10,000 Sorted Descending By Price]");
+    var expensiveTech = analytics.GetProductsByCategoryAndPrice("Electronics", 10000m);
+    foreach (var p in expensiveTech)
+    {
+        Console.WriteLine($" -> {p.Name} | Price: ₹{p.Price:N2} | Category: {p.Category}");
+    }
+
+    // 3. Average Grade Aggregate Value Calculations
+    double avgValue = analytics.CalculateAverageGradeValue(allStudents);
+    Console.WriteLine($"\n[3. Combined System Student Grade Average GPA Value]: {avgValue:F2} / 4.0");
+
+    // 4. Student Aggregation Groups
+    Console.WriteLine("\n[4. Global Student Distribution Count Metrics Per Grade Group]");
+    var gradeGroups = analytics.GetStudentCountByGrade(allStudents);
+    foreach (var group in gradeGroups)
+    {
+        Console.WriteLine($" -> Grade Group '{group.Grade}': {group.Count} Student(s)");
+    }
+
+    // 5. Product Segment Matrix Categories
+    Console.WriteLine("\n[5. Category Structural Valuation Metrics & Most Expensive Products]");
+    var catMetrics = analytics.GetProductTotalsByCategory();
+    foreach (var item in catMetrics)
+    {
+        Console.WriteLine($" -> [{item.Category}] Net Valuation Portfolio: ₹{item.TotalPrice:N2}");
+        if (item.MaxProduct != null)
+        {
+            Console.WriteLine($"    Premium Offering Item -> {item.MaxProduct.Name} (₹{item.MaxProduct.Price:N2})");
+        }
+    }
+    Console.WriteLine("=================================================================");
+    Console.WriteLine("\nPress any key to jump back to main configuration window...");
+    Console.ReadKey();
 }
