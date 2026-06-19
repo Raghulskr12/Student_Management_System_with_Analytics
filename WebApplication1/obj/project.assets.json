@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 3,
   "targets": {
     "net10.0": {
       "Microsoft.Extensions.DependencyModel/10.0.0": {
@@ -495,7 +495,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
             "D:\\.net\\Student_Management_System_with_Analytics_-_API_Integration\\Core\\Core.csproj": {
@@ -521,7 +520,6 @@
     },
     "frameworks": {
       "net10.0": {
-        "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
           "Serilog.AspNetCore": {
