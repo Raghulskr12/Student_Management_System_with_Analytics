@@ -7,12 +7,12 @@ namespace Core.Services
 {
     public class AnalyticsEngine
     {
-        private readonly List<Product> _products;
+        private readonly List<Product> _Products;
 
         public AnalyticsEngine()
         {
             
-            _products = new List<Product>
+            _Products = new List<Product>
             {
                 new(1, "ThinkPad X1 Carbon", 120000m, "Electronics"),
                 new(2, "MacBook Pro M3", 180000m, "Electronics"),
@@ -29,7 +29,7 @@ namespace Core.Services
             };
         }
 
-        public IEnumerable<Product> GetProducts() => _products;
+        public IEnumerable<Product> GetProducts() => _Products;
 
 
         // 1. Filtering & Sorting Students
@@ -43,7 +43,7 @@ namespace Core.Services
         // 2. Filtering & Sorting Products
         public IEnumerable<Product> GetProductsByCategoryAndPrice(string category, decimal minPrice)
         {
-            return _products
+            return _Products
                 .Where(p => p.Category.Equals(category, StringComparison.OrdinalIgnoreCase) && p.Price > minPrice)
                 .OrderByDescending(p => p.Price); // Descending order
         }
@@ -75,7 +75,7 @@ namespace Core.Services
         // 5. Grouping & Totals for Products
         public IEnumerable<dynamic> GetProductTotalsByCategory()
         {
-            return _products
+            return _Products
                 .GroupBy(p => p.Category)
                 .Select(g => new { Category = g.Key, TotalPrice = g.Sum(p => p.Price), MaxProduct = g.MaxBy(p => p.Price) });
         }

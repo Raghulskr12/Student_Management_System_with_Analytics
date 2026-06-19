@@ -1,53 +1,67 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using Core.Interfaces;
 using Core.Models;
 using Core.Exceptions;
 using Infrastructure.Data;
 
-var builder = Host.CreateApplicationBuilder(args);
+// 1. Bootstrap Serilog Logging Provider
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console()
+    .WriteTo.File("logs/app-log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
 
-// 1. Dependency Injection Registration
-// Pull configuration parameters dynamically from appsettings.json
-string filePath = builder.Configuration["StudentRepositorySettings:FilePath"] ?? "students.json";
+try
+{
+    Log.Information("Initializing Student Analytics Management Engine...");
 
-// Register our implementation as a Singleton service
-builder.Services.AddSingleton<IStudentRepository>(provider => new JsonStudentRepository(filePath));
+    var builder = Host.CreateApplicationBuilder(args);
+    
+    // Register configurations and services
+    string filePath = builder.Configuration["StudentRepositorySettings:FilePath"] ?? "students.json";
+    builder.Services.AddSingleton<IStudentRepository>(provider => new JsonStudentRepository(filePath));
+    builder.Services.AddSingleton<ExternalApiService>();
 
-using var host = builder.Build();
+    using var host = builder.Build();
+    var repository = host.Services.GetRequiredService<IStudentRepository>();
+    var apiService = host.Services.GetRequiredService<ExternalApiService>();
 
-// 2. Resolve the repository from our Container
-var repository = host.Services.GetRequiredService<IStudentRepository>();
+    await RunMenuLoopAsync(repository, apiService);
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application terminated unexpectedly during runtime initialization.");
+}
+finally
+{
+    Log.CloseAndFlush(); // Safeguard and flush log stream buffers
+}
 
-await RunMenuLoop(repository);
-
-static async Task RunMenuLoop(IStudentRepository repo)
+static async Task RunMenuLoopAsync(IStudentRepository repo, ExternalApiService apiService)
 {
     bool exit = false;
     while (!exit)
     {
-        Console.Clear();
-        Console.WriteLine("=========================================");
-        Console.WriteLine("    STUDENT MANAGEMENT SYSTEM (MODULE 1) ");
-        Console.WriteLine("=========================================");
+        Console.WriteLine("\n=== SYSTEM CONTROL PANEL ===");
         Console.WriteLine("1. Create Student");
         Console.WriteLine("2. Read All Students");
         Console.WriteLine("3. Update Student");
         Console.WriteLine("4. Delete Student");
         Console.WriteLine("5. Search Students");
         Console.WriteLine("6. Run LINQ Analytics Engine ");
-        Console.WriteLine("7. Synchronize External API Data Async ");
+        Console.WriteLine("7. Synchronize External API Data Async");
         Console.WriteLine("8. Exit");
-        Console.WriteLine("=========================================");
         Console.Write("Select an option (1-8): ");
 
         string choice = Console.ReadLine() ?? "";
-        Console.WriteLine();
-
         try
         {
             switch (choice)
@@ -58,23 +72,21 @@ static async Task RunMenuLoop(IStudentRepository repo)
                 case "4": HandleDelete(repo); break;
                 case "5": HandleSearch(repo); break;
                 case "6": HandleAnalytics(repo); break;
-                case "7": await HandleApiIntegrationAsync(repo); break;
+                case "7": await HandleApiIntegrationAsync(repo, apiService); break;
                 case "8": exit = true; break;
-                default:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Invalid option selection. Press any key to retry...");
-                    Console.ResetColor();
-                    Console.ReadKey();
-                    break;
+                default: Log.Warning("User supplied an invalid input choice: {Choice}", choice); break;
             }
+        }
+        catch (InvalidGradeException ex)
+        {
+            Log.Warning("Validation Catch: {Message}", ex.Message);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"[BAD INPUT] {ex.Message}");
+            Console.ResetColor();
         }
         catch (Exception ex)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"\n[ERROR] Operation failed: {ex.Message}");
-            Console.ResetColor();
-            Console.WriteLine("Press any key to return to menu...");
-            Console.ReadKey();
+            Log.Error(ex, "An unhandled error occurred during menu processing choice: {Choice}", choice);
         }
     }
 }
@@ -264,67 +276,29 @@ static void HandleAnalytics(IStudentRepository repo)
     Console.ReadKey();
 }
 
-static async Task HandleApiIntegrationAsync(IStudentRepository repo)
+static async Task HandleApiIntegrationAsync(IStudentRepository repo, ExternalApiService apiService)
 {
     Console.Clear();
-    Console.WriteLine("=================================================================");
-    Console.WriteLine("               ASYNC MULTI-THREADED API INTEGRATION              ");
-    Console.WriteLine("=================================================================");
-
     var students = repo.GetAll().ToList();
-    if (!students.Any())
-    {
-        Console.WriteLine("No student profiles exist in the system to enrich. Create some first!");
-        Console.ReadKey();
-        return;
-    }
+    if (!students.Any()) return;
 
-    Console.WriteLine($"Initiating concurrent operations for {students.Count} profile records...");
-    var apiService = new Infrastructure.Data.ExternalApiService();
-    
-    // Setup a structural 5-second maximum safety timeout boundary
     using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-
     var totalSystemWatch = System.Diagnostics.Stopwatch.StartNew();
 
     try
     {
-        // Allocate individual asynchronous data fetching tasks
         var tasks = students.Select(async student =>
         {
             string externalInsight = await apiService.FetchExternalDataAsync(student.Id, cts.Token);
             student.ExternalData = externalInsight;
-            repo.Update(student); // Commit changes back to JSON automatically
+            repo.Update(student);
         });
 
-        // Execute all running worker tasks concurrently in parallel channels
         await Task.WhenAll(tasks);
-
-        totalSystemWatch.Stop();
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("\n=================================================================");
-        Console.WriteLine($"[SUCCESS] Distributed sync completed in: {totalSystemWatch.ElapsedMilliseconds} ms!");
-        Console.WriteLine("=================================================================");
-        Console.ResetColor();
-
-        // Print final enriched values
-        Console.WriteLine("\nUpdated Profile Records View:");
-        foreach (var s in repo.GetAll())
-        {
-            Console.WriteLine($" -> ID: {s.Id} | Name: {s.Name} | Info: {s.ExternalData}");
-        }
+        Log.Information("Successfully synced {Count} records via concurrent API pipelines.", students.Count);
     }
     catch (OperationCanceledException)
     {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine("\n[TIMEOUT] System processing threshold breached! The execution pool was cancelled.");
-        Console.ResetColor();
+        Log.Error("API processing threshold breached! Timeout canceled pending requests.");
     }
-    finally
-    {
-        totalSystemWatch.Stop();
-    }
-
-    Console.WriteLine("\nPress any key to jump back to main configuration window...");
-    Console.ReadKey();
 }

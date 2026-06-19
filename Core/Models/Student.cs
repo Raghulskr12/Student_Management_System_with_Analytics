@@ -6,19 +6,19 @@ namespace Core.Models
 {
     public class Student
     {
-        static readonly HashSet<string> AllowedGrades = new() { "A", "B", "C", "D", "F" };
-        private string _grade = "F"; // Default grade
+        private static readonly HashSet<string> _AllowedGrades = new() { "A", "B", "C", "D", "F" };
+        private string _Grade = "F"; // Default grade
 
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Grade
         {
-            get => _grade;
+            get => _Grade;
             set
             {
                 string upperGrade = value?.ToUpper() ?? throw new ArgumentNullException(nameof(value));
-                if (!AllowedGrades.Contains(upperGrade)) throw new InvalidGradeException(upperGrade);
-                _grade = upperGrade;
+                if (!_AllowedGrades.Contains(upperGrade)) throw new InvalidGradeException(upperGrade);
+                _Grade = upperGrade;
             }
         }
         public string ExternalData { get; set; } = string.Empty;

@@ -1,0 +1,4 @@
+2026-06-19 10:42:53.647 +05:30 [INF] Initializing Student Analytics Management Engine...
+2026-06-19 10:42:57.941 +05:30 [INF] Student ID 13: Fetch finished in 595.3102ms (Try #1)
+2026-06-19 10:42:57.945 +05:30 [INF] Student ID 12: Fetch finished in 607.4164ms (Try #1)
+2026-06-19 10:42:57.952 +05:30 [INF] Successfully synced 2 records via concurrent API pipelines.
